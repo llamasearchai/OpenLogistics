@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open-logistics-config
+  namespace: openlogistics
+data:
+  ENVIRONMENT: "development"
+  DEBUG: "true"
+  MLX_ENABLED: "false"
+  LOG_LEVEL: "DEBUG"
+  ENABLE_AI_AGENTS: "true"
+  ENABLE_REAL_TIME_OPTIMIZATION: "true"
+  ENABLE_PREDICTIVE_ANALYTICS: "true"
+  PROMETHEUS_NAMESPACE: "openlogistics"
+  METRICS_ENABLED: "true"
+  TRACING_ENABLED: "true"
