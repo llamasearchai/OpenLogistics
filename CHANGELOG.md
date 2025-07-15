@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2025-07-15
+
+### Added
+- Comprehensive test coverage improvements achieving 84% overall coverage
+- Enhanced agent manager tests with complete lifecycle testing
+- Supply chain agent tests with full OpenAI integration testing
+- Threat assessment, resource optimizer, and mission coordinator agent tests
+- Complete CLI command testing with all parameter combinations
+- Advanced error handling and edge case testing
+- Performance and security test enhancements
+
+### Improved
+- Test architecture with better mocking and async testing patterns
+- Agent initialization and configuration management
+- CLI command error handling and user feedback
+- Code quality and maintainability through comprehensive testing
+- Documentation and test coverage reporting
+
+### Fixed
+- Agent lifecycle management edge cases
+- CLI command error propagation
+- Mock object handling in async contexts
+- Test isolation and cleanup procedures
+
 ## [1.0.3] - 2025-07-15
 
 ### Fixed
