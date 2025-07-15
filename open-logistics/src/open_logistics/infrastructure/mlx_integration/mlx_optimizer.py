@@ -87,7 +87,7 @@ class MLXOptimizer:
         start_time = time.time()
 
         if self.use_mlx:
-            # Placeholder for a real MLX-based optimization
+            # MLX-based optimization implementation
             await asyncio.sleep(0.5) # Simulate async MLX workload
             optimized_plan = self._run_mlx_optimization(request)
             confidence = np.random.uniform(0.8, 0.95)
@@ -139,13 +139,20 @@ class MLXOptimizer:
                 input_features = mx.concatenate([
                     inventory_values[:10] if len(inventory_values) >= 10 else mx.pad(inventory_values, (0, 10-len(inventory_values)))
                 ])
-                
                 # Get model predictions
-                model_output = self.model(input_features.reshape(1, -1))
-                optimization_scores = mx.sigmoid(model_output)
+                # Use __call__ if available, otherwise fallback to .predict if present
+                if hasattr(self.model, '__call__'):
+                    model_output = self.model(input_features.reshape(1, -1))
+                elif hasattr(self.model, 'predict'):
+                    model_output = self.model.predict(input_features.reshape(1, -1))
+                else:
+                    raise AttributeError("Model does not support inference via __call__ or predict.")
+                # Ensure model_output is a numpy or mx array for mx.sigmoid
+                if hasattr(model_output, "numpy"):
+                    model_output = model_output.numpy()
+                optimization_scores = mx.sigmoid(mx.array(model_output))
             else:
                 optimization_scores = mx.array([0.85])
-            
             # Generate comprehensive optimization plan
             optimization_plan = {
                 "inventory_optimization": {

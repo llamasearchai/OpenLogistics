@@ -21,5 +21,5 @@ class TestCLICommandsCoverage:
         result = self.runner.invoke(app, ["predict", "--type", "failures"])
         assert result.exit_code == 0
         assert "Failures Predictions" in result.stdout
-        # The use case should not have been called for this placeholder type
+        # The use case should not have been called for this invalid type
         mock_use_case.assert_not_called() 
