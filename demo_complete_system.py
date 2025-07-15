@@ -119,12 +119,12 @@ async def demonstrate_mlx_optimization():
                     "missiles": 100,
                     "radar_systems": 50,
                     "communication_units": 200
-                },
-                "constraints": {
-                    "budget": 10000000,
-                    "timeline": 30,
-                    "security_clearance": "SECRET"
                 }
+            },
+            constraints={
+                "budget": 10000000,
+                "timeline": 30,
+                "security_clearance": "SECRET"
             },
             objectives=["minimize_cost", "maximize_readiness"],
             time_horizon=30,
@@ -175,9 +175,9 @@ async def demonstrate_use_cases():
         
         request = OptimizationRequest(
             supply_chain_data={
-                "inventory": {"ammunition": 1000, "vehicles": 50},
-                "constraints": {"budget": 5000000}
+                "inventory": {"ammunition": 1000, "vehicles": 50}
             },
+            constraints={"budget": 5000000},
             objectives=["minimize_cost"],
             time_horizon=30,
             priority_level="medium"
