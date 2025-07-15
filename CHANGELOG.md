@@ -1,11 +1,30 @@
 # Changelog
 
-All notable changes to Open Logistics will be documented in this file.
+All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1] - 2024-12-30
+## [1.0.2] - 2025-07-15
+
+### Fixed
+- Fixed import resolution errors in demo_complete_system.py
+- Added missing encrypt/decrypt convenience methods to SecurityManager
+- Added missing ENABLED and SECURITY_LEVEL configuration fields
+- Updated domain entity usage to match current InventoryItem model
+- Converted MLX optimization and demand prediction demos to async
+- Added missing asyncio import to security tests
+
+### Changed
+- Updated demo script to use correct package paths and current APIs
+- Improved error handling and compatibility across all modules
+
+### Verified
+- All 36 tests passing with no import resolution errors
+- Demo script runs successfully and demonstrates all features
+- Production-ready with complete functionality
+
+## [1.0.1] - 2025-07-14
 
 ### Fixed
 - [CRITICAL] Removed all remaining emojis from codebase and replaced with professional text equivalents

@@ -12,7 +12,7 @@ from open_logistics.infrastructure.mlx_integration.mlx_optimizer import Optimiza
 app = FastAPI(
     title="Open Logistics API",
     description="AI-Driven Air Defense Supply Chain Optimization Platform",
-    version="1.0.1",
+    version="1.0.2",
 )
 
 @app.get("/health")

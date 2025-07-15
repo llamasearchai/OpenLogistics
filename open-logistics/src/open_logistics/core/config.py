@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     """Main application settings."""
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
 
-    APP_VERSION: str = "1.0.1"
+    APP_VERSION: str = "1.0.2"
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"
