@@ -82,6 +82,30 @@ class SecurityManager:
         key = base64.urlsafe_b64encode(kdf.derive(password))
         return key
 
+    def encrypt(self, data: str) -> str:
+        """
+        Encrypt a string (convenience method for demo).
+        
+        Args:
+            data: String to encrypt
+            
+        Returns:
+            Encrypted string
+        """
+        return self.encrypt_string(data)
+    
+    def decrypt(self, encrypted_data: str) -> str:
+        """
+        Decrypt a string (convenience method for demo).
+        
+        Args:
+            encrypted_data: Encrypted string to decrypt
+            
+        Returns:
+            Decrypted string
+        """
+        return self.decrypt_string(encrypted_data)
+
     def encrypt_data(self, data: bytes) -> bytes:
         """
         Encrypts the provided data using AES-256 encryption.

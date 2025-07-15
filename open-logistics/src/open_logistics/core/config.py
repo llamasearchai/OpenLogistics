@@ -19,11 +19,13 @@ class MLXSettings(BaseSettings):
 class SecuritySettings(BaseSettings):
     """Security-related configurations."""
     SECRET_KEY: str = "default_secret_key_that_should_be_overridden"
+    SECURITY_LEVEL: str = "STANDARD"
     CLASSIFICATION_LEVEL: Literal["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP_SECRET"] = "UNCLASSIFIED"
 
 
 class SapBtpSettings(BaseSettings):
     """SAP BTP integration settings."""
+    ENABLED: bool = False
     BTP_CLIENT_ID: str = ""
     BTP_CLIENT_SECRET: str = ""
     BTP_TOKEN_URL: str = ""
@@ -38,7 +40,7 @@ class Settings(BaseSettings):
     """Main application settings."""
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
 
-    APP_VERSION: str = "1.0.0"
+    APP_VERSION: str = "1.0.1"
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"

@@ -22,13 +22,15 @@ from datetime import datetime
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+ROOT_DIR = Path(__file__).resolve().parent
+PACKAGE_SRC = ROOT_DIR / "open-logistics" / "src"
+sys.path.insert(0, str(PACKAGE_SRC))
 
 from open_logistics.core.config import get_settings
 from open_logistics.infrastructure.mlx_integration.mlx_optimizer import (
     MLXOptimizer,
     OptimizationRequest,
-    PredictionRequest
+    # PredictionRequest removed; using direct parameters for demand prediction
 )
 from open_logistics.application.use_cases.optimize_supply_chain import OptimizeSupplyChainUseCase
 from open_logistics.application.use_cases.predict_demand import PredictDemandUseCase
@@ -89,22 +91,21 @@ def demonstrate_domain_entities():
         inventory = Inventory()
         
         # Add items
-        item1 = InventoryItem(id="ITEM001", name="Missile System", quantity=10, unit_price=50000.0)
-        item2 = InventoryItem(id="ITEM002", name="Radar Component", quantity=25, unit_price=15000.0)
+        item1 = InventoryItem(product_id="ITEM001", quantity=10, location="Warehouse_A")
+        item2 = InventoryItem(product_id="ITEM002", quantity=25, location="Warehouse_B")
         
         inventory.add_item(item1)
         inventory.add_item(item2)
         
         print_info(f"Inventory items: {len(inventory.items)}")
         print_info(f"Total quantity: {inventory.get_total_quantity()}")
-        print_info(f"Total value: ${inventory.get_total_value():,.2f}")
         
         print_success("Domain entities working correctly")
     except Exception as e:
         print_error(f"Domain entities error: {e}")
 
 
-def demonstrate_mlx_optimization():
+async def demonstrate_mlx_optimization():
     """Demonstrate MLX optimization."""
     print_section("MLX Optimization Engine")
     
@@ -131,42 +132,33 @@ def demonstrate_mlx_optimization():
         )
         
         # Run optimization
-        result = optimizer.optimize(request)
+        result = await optimizer.optimize_supply_chain(request)
         
-        print_info(f"Optimization status: {result.status}")
-        print_info(f"Objective value: {result.objective_value}")
-        print_info(f"Execution time: {result.execution_time:.3f}s")
-        print_info(f"Optimized variables: {len(result.optimized_variables)}")
+        print_info(f"Confidence score: {result.confidence_score:.2f}")
+        print_info(f"Execution time: {result.execution_time_ms:.2f} ms")
+        print_info(f"Optimized elements: {len(result.optimized_plan)}")
         
         print_success("MLX optimization completed successfully")
     except Exception as e:
         print_error(f"MLX optimization error: {e}")
 
 
-def demonstrate_demand_prediction():
+async def demonstrate_demand_prediction():
     """Demonstrate demand prediction."""
     print_section("Demand Prediction")
     
     try:
         optimizer = MLXOptimizer()
         
-        # Create prediction request
-        request = PredictionRequest(
-            prediction_type="demand",
-            historical_data={
-                "demand_history": [100, 120, 90, 110, 95, 130, 105],
-                "seasonal_factors": [1.0, 1.1, 0.9, 1.05, 0.95, 1.2, 1.0]
-            },
-            time_horizon=7
-        )
+        historical_data = {
+            "demand_history": [100, 120, 90, 110, 95, 130, 105]
+        }
+        time_horizon = 7
         
         # Run prediction
-        result = optimizer.predict_demand(request)
+        result = await optimizer.predict_demand(historical_data, time_horizon)
         
-        print_info(f"Prediction status: {result.status}")
-        print_info(f"Predicted values: {result.predicted_values}")
-        print_info(f"Confidence interval: {result.confidence_interval}")
-        print_info(f"Execution time: {result.execution_time:.3f}s")
+        print_info(f"Predicted values: {result}")
         
         print_success("Demand prediction completed successfully")
     except Exception as e:
@@ -192,22 +184,14 @@ async def demonstrate_use_cases():
         )
         
         result = await optimization_use_case.execute(request)
-        print_info(f"Supply chain optimization: {result.status}")
+        print_info(f"Supply chain optimization confidence: {result.confidence_score:.2f}")
         
         # Demand prediction use case
         prediction_use_case = PredictDemandUseCase()
-        
-        pred_request = PredictionRequest(
-            prediction_type="demand",
-            historical_data={
-                "demand_history": [80, 90, 85, 95, 88],
-                "seasonal_factors": [1.0, 1.0, 1.0, 1.0, 1.0]
-            },
-            time_horizon=5
-        )
-        
-        pred_result = await prediction_use_case.execute(pred_request)
-        print_info(f"Demand prediction: {pred_result.status}")
+        historical_data_uc = {"demand_history": [80, 90, 85, 95, 88]}
+        time_horizon_uc = 5
+        pred_result = await prediction_use_case.execute(historical_data_uc, time_horizon_uc)
+        print_info(f"Demand prediction generated {len(pred_result['predictions'])} values")
         
         print_success("Use cases executed successfully")
     except Exception as e:
@@ -402,8 +386,8 @@ async def main():
     # Run all demonstrations
     demonstrate_configuration()
     demonstrate_domain_entities()
-    demonstrate_mlx_optimization()
-    demonstrate_demand_prediction()
+    await demonstrate_mlx_optimization()
+    await demonstrate_demand_prediction()
     await demonstrate_use_cases()
     demonstrate_security()
     demonstrate_cli()

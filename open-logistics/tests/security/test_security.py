@@ -4,6 +4,7 @@ Security tests for Open Logistics platform.
 
 import pytest
 from unittest.mock import patch, Mock
+import asyncio
 
 from open_logistics.core.config import get_settings
 from open_logistics.core.security import SecurityManager
