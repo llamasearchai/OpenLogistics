@@ -19,7 +19,8 @@ async def test_optimizer_with_mlx_enabled():
                 time_horizon=7
             )
             result = await optimizer.optimize_supply_chain(request)
-            assert "mlx_output_vector" in result.optimized_plan
+            assert "performance_metrics" in result.optimized_plan
+            assert result.optimized_plan["performance_metrics"]["computation_method"] == "MLX-accelerated"
 
 @pytest.mark.asyncio
 async def test_optimizer_with_mlx_disabled():
@@ -35,7 +36,8 @@ async def test_optimizer_with_mlx_disabled():
                 time_horizon=7
             )
             result = await optimizer.optimize_supply_chain(request)
-            assert "predicted_stock_level" in result.optimized_plan
+            assert "performance_metrics" in result.optimized_plan
+            assert result.optimized_plan["performance_metrics"]["computation_method"] == "CPU-based"
 
 @pytest.mark.asyncio
 async def test_predict_demand():

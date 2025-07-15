@@ -14,7 +14,7 @@ import hashlib
 import hmac
 import json
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Any
 
 from cryptography.fernet import Fernet
@@ -162,8 +162,8 @@ class SecurityManager:
                 "user_id": user_id,
                 "role": role,
                 "classification_level": self.settings.security.CLASSIFICATION_LEVEL,
-                "iat": datetime.utcnow(),
-                "exp": datetime.utcnow() + timedelta(hours=expires_in_hours),
+                            "iat": datetime.now(timezone.utc),
+            "exp": datetime.now(timezone.utc) + timedelta(hours=expires_in_hours),
                 "iss": "open_logistics",
                 "permissions": self._roles.get(role, {}).get("permissions", [])
             }
@@ -355,7 +355,7 @@ class SecurityManager:
             details: Event details
         """
         log_entry = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "event_type": event_type,
             "details": details,
             "classification_level": self.settings.security.CLASSIFICATION_LEVEL
