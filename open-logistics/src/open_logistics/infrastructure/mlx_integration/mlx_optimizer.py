@@ -64,6 +64,10 @@ else:
             
         def __call__(self, x: Any) -> Any:
             return None
+            
+        def predict(self, x: Any) -> Any:
+            """Predict method for compatibility with scikit-learn interface."""
+            return None
 
 
 class MLXOptimizer:
@@ -139,14 +143,11 @@ class MLXOptimizer:
                 input_features = mx.concatenate([
                     inventory_values[:10] if len(inventory_values) >= 10 else mx.pad(inventory_values, (0, 10-len(inventory_values)))
                 ])
-                # Get model predictions
-                # Use __call__ if available, otherwise fallback to .predict if present
-                if hasattr(self.model, '__call__'):
-                    model_output = self.model(input_features.reshape(1, -1))
-                elif hasattr(self.model, 'predict'):
+                # Get model predictions using scikit-learn predict method
+                if hasattr(self.model, 'predict'):
                     model_output = self.model.predict(input_features.reshape(1, -1))
                 else:
-                    raise AttributeError("Model does not support inference via __call__ or predict.")
+                    raise AttributeError("Model does not support inference via predict method.")
                 # Ensure model_output is a numpy or mx array for mx.sigmoid
                 if hasattr(model_output, "numpy"):
                     model_output = model_output.numpy()
