@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[envs.default]
+dependencies = [
+    "pytest",
+    "pytest-asyncio", 
+    "pytest-cov",
+    "pytest-mock",
+]
+
+[envs.default.scripts]
+test = "pytest tests/ -v"
+test-cov = "pytest tests/ -v --cov=open_logistics --cov-report=html"
+test-cov-xml = "pytest tests/ -v --cov=open_logistics --cov-report=xml"
+
+[envs.lint]
+dependencies = [
+    "black",
+    "isort",
+    "flake8",
+]
+[envs.lint.scripts]
+check = [
+    "black --check src tests",
+    "isort --check-only src tests", 
+    "flake8 src tests --max-line-length=88",
+]
+format = [
+    "black src tests",
+    "isort src tests",
+]
+
+[envs.type-check]
+dependencies = [
+    "mypy",
+    "types-requests",
+]
+[envs.type-check.scripts]
+check = "mypy src --ignore-missing-imports"
+
+[envs.security]
+dependencies = [
+    "bandit",
+    "safety",
+]
+[envs.security.scripts]
+check = [
+    "bandit -r src/",
+    "safety check",
+]
+
+[envs.docs]
+dependencies = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-mermaid2-plugin",
+]
+[envs.docs.scripts]
+build = "mkdocs build"
+serve = "mkdocs serve"
